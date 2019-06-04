@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <br>
+    <div id="gifButtons">
+
+    </div>
+
+    <br>
+
+    <div id="gifs-here">
+
+    </div>
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="assets/app.js"></script> -->
+
+    <script type="text/javascript">
+        var topics = ["Thanos", "Captain Falcon", "Star-Lord"];
+        for (var i = 0; i < topics.length; i++) {
+            // log
+            console.log(topics[i]);
+            // dynamic buttons
+            var clickies = $("<button>");
+            $("#gifButtons").prepend(clickies);
+            $(clickies).text(topics[i]);
+            $(clickies).attr("input-data", topics[i])
+
+
+
+            // onClick
+            $(clickies).on("click", function () {
+                var searchTerm = $(this).attr("input-data")
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm +
+                    "&api_key=Rr0bxGw6kpikj27dsF0IguzK4mXtAQX6&limit=5";
+
+                console.log(searchTerm)
+                $.ajax({
+                        url: queryURL,
+                        method: "GET"
+                    })
+
+                    .then(function (response) {
+                        var dataArray = response.data;
+                        console.log(response)
+
+                        for (var g = 0; g < dataArray.length; g++) {
+                            var imageURL = response.data[g].images.fixed_height_still.url;
+
+                            // gifs are a little more cleaned up by appending each <img> to its own <div>
+                            var freshDivs = $("<div>");
+                            var resultImage = $("<img>");
+                            var lineBreaks = $("<br>")
+                            $(freshDivs).append(resultImage);
+                            $(freshDivs).append(lineBreaks);
+                            $(freshDivs).append("Rating: " + response.data[g].rating);
+                            $(resultImage).addClass("gif");
+
+                            resultImage.attr("src", imageURL);
+                            resultImage.attr("alt", "gif");
+
+                            $("#gifs-here").prepend(freshDivs);
+                        }
+                    });
+            })
+        }
+    </script>
+</body>
+
+</html>
