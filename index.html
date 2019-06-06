@@ -15,6 +15,10 @@
     <div id="gifButtons">
 
     </div>
+    <br>
+    <div id="input">
+
+    </div>
 
     <br>
 
@@ -28,6 +32,9 @@
 
     <script type="text/javascript">
         var topics = ["Thanos", "Captain Falcon", "Star-Lord"];
+        var inputField = $("<input>");
+        inputField.attr("type", "text");
+        $("#input").append(inputField)
         for (var i = 0; i < topics.length; i++) {
             // log
             console.log(topics[i]);
@@ -57,24 +64,54 @@
 
                         for (var g = 0; g < dataArray.length; g++) {
                             var imageURL = response.data[g].images.fixed_height_still.url;
+                            var dynamicImageURL = response.data[g].images.fixed_height.url;
 
                             // gifs are a little more cleaned up by appending each <img> to its own <div>
-                            var freshDivs = $("<div>");
+                            var freshDivs = $("<div>").attr("id", "yang");
+                            
+                            var clickies2 = $("<button>");
                             var resultImage = $("<img>");
-                            var lineBreaks = $("<br>")
+                            var lineBreaks = $("<br>");
+                            
                             $(freshDivs).append(resultImage);
                             $(freshDivs).append(lineBreaks);
                             $(freshDivs).append("Rating: " + response.data[g].rating);
                             $(resultImage).addClass("gif");
-
                             resultImage.attr("src", imageURL);
                             resultImage.attr("alt", "gif");
 
                             $("#gifs-here").prepend(freshDivs);
+                            $(resultImage).attr("data-still", imageURL)
+                            $(resultImage).attr("data-animate", dynamicImageURL)
+                            
+                            // if (pause = true) {
+                            //     $("#unpause").on("click", function(e){
+                            //         e.stopPropagation();
+                            //         // console.log(this.closest("img"));
+                            //         $(this).find("img".attr("src", dynamicImageURL))
+                                        
+                            //     });
+                            // }
+                            
+                            $(resultImage).on("click", function(){
+                                var state = $(this).attr("data-state");
+                                if (state === "still") {
+                                    $(this).attr("src", $(this).attr("data-animate"));
+                                    $(this).attr("data-state", "animate");
+                                } else {
+                                    $(this).attr("src", $(this).attr("data-still"));
+                                    $(this).attr("data-state", "still");
+                                }
+                                
+                            })
                         }
+                            // $(".gif").wrap("<button id='unpause'></button");
                     });
             })
+                        
+                            
         }
+                            
     </script>
 </body>
 
