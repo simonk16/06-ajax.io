@@ -15,11 +15,19 @@
     <div id="gifButtons">
 
     </div>
+    
     <br>
-    <div id="input">
-
+    
+    <div id="inputDiv">
+        <input id="inputField" type="text">
     </div>
 
+    <br>
+    
+    <div id="submitButton">
+        <button id="submit-input"></button>
+    </div>
+    
     <br>
 
     <div id="gifs-here">
@@ -31,23 +39,49 @@
     <!-- <script type="text/javascript" src="assets/app.js"></script> -->
 
     <script type="text/javascript">
-        var topics = ["Thanos", "Captain Falcon", "Star-Lord"];
-        var inputField = $("<input>");
-        inputField.attr("type", "text");
-        $("#input").append(inputField)
-        for (var i = 0; i < topics.length; i++) {
+        var topics = [];
+        
+        $("#submit-input").click(function(){
+            
+            myFunction();
+        })
+        
+        function clearField() {
+            $("#inputField").val("")
+            topics = [];
+        }
+        function myFunction() {
+            
+            var inputData = $("#inputField").val()
+            topics.push(inputData);
+            console.log(inputData);
+            swagFunc()
+            clearField()
+        }
+        function swagFunc() {
+            
+            // $("#gifButtons").clear()
+            for (var i = 0; i < topics.length; i++) {
+            
             // log
             console.log(topics[i]);
             // dynamic buttons
+            
+            // if #inputField is blank, do nothing. else, do the thing
+            if ($("#inputField").val() === "") {
+                alert("Type something first!")
+            } else {
             var clickies = $("<button>");
             $("#gifButtons").prepend(clickies);
             $(clickies).text(topics[i]);
             $(clickies).attr("input-data", topics[i])
+            $(clickies).attr("id", "clicky")
 
-
+            
 
             // onClick
             $(clickies).on("click", function () {
+                event.preventDefault($("#inputField"))
                 var searchTerm = $(this).attr("input-data")
                 var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm +
                     "&api_key=Rr0bxGw6kpikj27dsF0IguzK4mXtAQX6&limit=5";
@@ -108,10 +142,10 @@
                             // $(".gif").wrap("<button id='unpause'></button");
                     });
             })
-                        
+            }            
                             
         }
-                            
+        }                 
     </script>
 </body>
 
