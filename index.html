@@ -8,31 +8,41 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
+    
+    <div class="container-fluid">Free Gifs</div>
     <br>
-    <div id="gifButtons">
+   
+        <div id="gifButtons">
 
-    </div>
+        </div>
+        
+        <br>
+        
+        <div class="container">
+            
+            <div id="inputDiv">
+                <input id="inputField" type="text">
+            </div>
+        
+            <div id="submitButton">
+                <button id="submit-input">Submit</button>
+            </div>
+        
+        </div>
+        
+        
+    <br>
+    
     
     <br>
+        <div id="gifs-here">
     
-    <div id="inputDiv">
-        <input id="inputField" type="text">
-    </div>
+        </div>
 
-    <br>
-    
-    <div id="submitButton">
-        <button id="submit-input"></button>
-    </div>
-    
-    <br>
-
-    <div id="gifs-here">
-
-    </div>
 
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -40,112 +50,107 @@
 
     <script type="text/javascript">
         var topics = [];
-        
-        $("#submit-input").click(function(){
-            
+
+        $("#submit-input").click(function () {
+
             myFunction();
         })
-        
+
         function clearField() {
             $("#inputField").val("")
             topics = [];
         }
+
         function myFunction() {
-            
+
             var inputData = $("#inputField").val()
             topics.push(inputData);
             console.log(inputData);
             swagFunc()
             clearField()
         }
+
         function swagFunc() {
-            
+
             // $("#gifButtons").clear()
             for (var i = 0; i < topics.length; i++) {
-            
-            // log
-            console.log(topics[i]);
-            // dynamic buttons
-            
-            // if #inputField is blank, do nothing. else, do the thing
-            if ($("#inputField").val() === "") {
-                alert("Type something first!")
-            } else {
-            var clickies = $("<button>");
-            $("#gifButtons").prepend(clickies);
-            $(clickies).text(topics[i]);
-            $(clickies).attr("input-data", topics[i])
-            $(clickies).attr("id", "clicky")
 
-            
+                // log
+                console.log(topics[i]);
 
-            // onClick
-            $(clickies).on("click", function () {
-                event.preventDefault($("#inputField"))
-                var searchTerm = $(this).attr("input-data")
-                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm +
-                    "&api_key=Rr0bxGw6kpikj27dsF0IguzK4mXtAQX6&limit=5";
+                // if #inputField is blank, do nothing. else, do the thing
+                if ($("#inputField").val() === "") {
+                    alert("Type something first!")
+                } else {
+                // dynamic buttons
+                    var clickies = $("<button>");
+                    $("#gifButtons").prepend(clickies);
+                    $(clickies).text(topics[i]);
+                    $(clickies).attr("input-data", topics[i])
+                    $(clickies).attr("id", "clicky")
 
-                console.log(searchTerm)
-                $.ajax({
-                        url: queryURL,
-                        method: "GET"
-                    })
 
-                    .then(function (response) {
-                        var dataArray = response.data;
-                        console.log(response)
 
-                        for (var g = 0; g < dataArray.length; g++) {
-                            var imageURL = response.data[g].images.fixed_height_still.url;
-                            var dynamicImageURL = response.data[g].images.fixed_height.url;
+                    // onClick
+                    $(clickies).on("click", function () {
+                        event.preventDefault($("#inputField"))
+                        var searchTerm = $(this).attr("input-data")
+                        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm +
+                            "&api_key=Rr0bxGw6kpikj27dsF0IguzK4mXtAQX6&limit=5";
 
-                            // gifs are a little more cleaned up by appending each <img> to its own <div>
-                            var freshDivs = $("<div>").attr("id", "yang");
-                            
-                            var clickies2 = $("<button>");
-                            var resultImage = $("<img>");
-                            var lineBreaks = $("<br>");
-                            
-                            $(freshDivs).append(resultImage);
-                            $(freshDivs).append(lineBreaks);
-                            $(freshDivs).append("Rating: " + response.data[g].rating);
-                            $(resultImage).addClass("gif");
-                            resultImage.attr("src", imageURL);
-                            resultImage.attr("alt", "gif");
-
-                            $("#gifs-here").prepend(freshDivs);
-                            $(resultImage).attr("data-still", imageURL)
-                            $(resultImage).attr("data-animate", dynamicImageURL)
-                            
-                            // if (pause = true) {
-                            //     $("#unpause").on("click", function(e){
-                            //         e.stopPropagation();
-                            //         // console.log(this.closest("img"));
-                            //         $(this).find("img".attr("src", dynamicImageURL))
-                                        
-                            //     });
-                            // }
-                            
-                            $(resultImage).on("click", function(){
-                                var state = $(this).attr("data-state");
-                                if (state === "still") {
-                                    $(this).attr("src", $(this).attr("data-animate"));
-                                    $(this).attr("data-state", "animate");
-                                } else {
-                                    $(this).attr("src", $(this).attr("data-still"));
-                                    $(this).attr("data-state", "still");
-                                }
-                                
+                        console.log(searchTerm)
+                        $.ajax({
+                                url: queryURL,
+                                method: "GET"
                             })
-                        }
-                            // $(".gif").wrap("<button id='unpause'></button");
-                    });
-            })
-            }            
-                            
+
+                            .then(function (response) {
+                                var dataArray = response.data;
+                                console.log(response)
+
+                                for (var g = 0; g < dataArray.length; g++) {
+                                    var imageURL = response.data[g].images.fixed_height_still.url;
+                                    var dynamicImageURL = response.data[g].images.fixed_height.url;
+
+                                    // gifs are a little more cleaned up by appending each <img> to its own <div>
+                                    var freshDivs = $("<div>").attr("id", "yang");
+
+                                    var clickies2 = $("<button>");
+                                    var resultImage = $("<img>");
+                                    var lineBreaks = $("<br>");
+
+                                    $(freshDivs).append(resultImage);
+                                    $(freshDivs).append(lineBreaks);
+                                    $(freshDivs).append("Rating: " + response.data[g].rating);
+                                    $(resultImage).addClass("gif");
+                                    resultImage.attr("src", imageURL);
+                                    resultImage.attr("alt", "gif");
+
+                                    $("#gifs-here").prepend(freshDivs);
+                                    $(resultImage).attr("data-still", imageURL)
+                                    $(resultImage).attr("data-animate", dynamicImageURL)
+
+
+
+                                    $(resultImage).on("click", function () {
+                                        var state = $(this).attr("data-state");
+                                        if (state === "still") {
+                                            $(this).attr("src", $(this).attr("data-animate"));
+                                            $(this).attr("data-state", "animate");
+                                        } else {
+                                            $(this).attr("src", $(this).attr("data-still"));
+                                            $(this).attr("data-state", "still");
+                                        }
+
+                                    })
+                                }
+
+                            });
+                    })
+                }
+
+            }
         }
-        }                 
     </script>
 </body>
 
